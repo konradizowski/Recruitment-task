@@ -17,31 +17,23 @@ const Row = ({id, firstName, lastName, dateOfBirth, company, note}) => (
     </div>
 );
 
-/*
-  Table component written as an ES6 class
-*/
+
 class Table extends React.Component {
     constructor() {
         super();
         this.state = {
-            data:
-
-                [
-                    // {id: this.state.data.id, firstName: this.state.data.firstName, lastName: this.state.data.lastName, dateOfBirth: this.state.data.dateOfBirth, company: this.state.data.company, note: this.state.data.note},
-                    // {id: 532, title: 'Task 532', priority: 'Medium', type: 'Improvement', complete: 30},
-                    // {id: 240, title: 'Task 240', priority: 'High', type: 'Story', complete: 66},
-                ],
-
+            data: [],
 
         };
     }
+
     ComponentDidMount () {
         fetch('./db/data.json')
             .then(r => r.json())
             .then(data => {
                 return(
                 console.log(data),
-                this.setState({id: this.state.data.id, firstName: this.state.data.firstName, lastName: this.state.data.lastName, dateOfBirth: this.state.data.dateOfBirth, company: this.state.data.company, note: this.state.data.note},
+                this.setState({id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, dateOfBirth: this.state.dateOfBirth, company: this.state.company, note: this.state.note},
                 )
 
                 )
