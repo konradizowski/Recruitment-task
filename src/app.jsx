@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import data from "./db/data.json"
 require('./scss/main.scss');
 
-
+console.log(data)
 
 const Row = ({id, firstName, lastName, dateOfBirth, company, note}) => (
     <div className="row">
@@ -27,23 +27,9 @@ class Table extends React.Component {
             dateOfBirth: undefined,
             company: undefined,
             note: undefined,
+            data: data
         };
 
-        fetch("/db/data.json")
-            .then( function(response) {
-                return response
-            })
-            .then( function(data) {
-                data.setState({
-                    id: data.id,
-
-                });
-            })
-            .catch( function() {
-                data.setState({
-                    infoStatus: 'error'
-                });
-            })
 
 
         this.compareBy.bind(this);
@@ -65,19 +51,20 @@ class Table extends React.Component {
     }
 
     render() {
-        const rows = this.state.data.map((rowData) => <Row {...rowData} />);
+        const Rows = this.state.data.map((rowData) => <Row {...rowData} />);
 
         return (
             <div className="table">
                 <div className="header">
                     <div onClick={() => this.sortBy('id')}>ID</div>
-                    <div onClick={() => this.sortBy('title')}>Title</div>
-                    <div onClick={() => this.sortBy('priority')}>Priority</div>
-                    <div onClick={() => this.sortBy('type')}>Issue Type</div>
-                    <div onClick={() => this.sortBy('complete')}>% Complete</div>
+                    <div onClick={() => this.sortBy('firstName')}>First Name</div>
+                    <div onClick={() => this.sortBy('lastName')}>Last Name</div>
+                    <div onClick={() => this.sortBy('date')}>Date of Birth</div>
+                    <div onClick={() => this.sortBy('company')}>Company</div>
+                    <div onClick={() => this.sortBy('note')}>Note</div>
                 </div>
                 <div className="body">
-                    {rows}
+                    {Rows}
                 </div>
             </div>
         );
@@ -85,28 +72,8 @@ class Table extends React.Component {
     }
 
 
-    ComponentDidMount() {
-        fetch('./db/data.json')
-            .then(r => r.json())
-            .then(data => {
-                return (
-                    console.log(data),
-                        this.setState({
-                                id: this.state.id,
-                                firstName: this.state.firstName,
-                                lastName: this.state.lastName,
-                                dateOfBirth: this.state.dateOfBirth,
-                                company: this.state.company,
-                                note: this.state.note
-                            },
-                        )
-
-                )
-            });
-    }
 
 }
-
 
 
 
