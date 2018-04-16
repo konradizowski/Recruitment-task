@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import data from './db/data.json';
 
 require('./scss/main.scss');
 
@@ -19,25 +18,32 @@ const Row = ({id, firstName, lastName, dateOfBirth, company, note}) => (
 
 
 class Table extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            data: [],
-
+            id: undefined,
+            firstName: undefined ,
+            lastName: undefined,
+            dateOfBirth: undefined,
+            company: undefined,
+            note: undefined,
         };
-    }
 
-    ComponentDidMount () {
-        fetch('./db/data.json')
-            .then(r => r.json())
-            .then(data => {
-                return(
-                console.log(data),
-                this.setState({id: this.state.id, firstName: this.state.firstName, lastName: this.state.lastName, dateOfBirth: this.state.dateOfBirth, company: this.state.company, note: this.state.note},
-                )
+        fetch("/db/data.json")
+            .then( function(response) {
+                return response
+            })
+            .then( function(data) {
+                data.setState({
+                    id: data.id,
 
-                )
-            });
+                });
+            })
+            .catch( function() {
+                data.setState({
+                    infoStatus: 'error'
+                });
+            })
 
 
         this.compareBy.bind(this);
@@ -59,17 +65,16 @@ class Table extends React.Component {
     }
 
     render() {
-        const rows = this.state.data.map( (rowData) => <Row {...rowData} />);
+        const rows = this.state.data.map((rowData) => <Row {...rowData} />);
 
         return (
             <div className="table">
                 <div className="header">
-                    <div onClick={() => this.sortBy('id')} >ID</div>
-                    <div onClick={() => this.sortBy('firstName')}>First Name</div>
-                    <div onClick={() => this.sortBy('lastName')}>Last Name</div>
-                    <div onClick={() => this.sortBy('dateOfBirth')}>Date of Birth</div>
-                    <div onClick={() => this.sortBy('company')}>Company</div>
-                    <div onClick={() => this.sortBy('note')}>Note</div>
+                    <div onClick={() => this.sortBy('id')}>ID</div>
+                    <div onClick={() => this.sortBy('title')}>Title</div>
+                    <div onClick={() => this.sortBy('priority')}>Priority</div>
+                    <div onClick={() => this.sortBy('type')}>Issue Type</div>
+                    <div onClick={() => this.sortBy('complete')}>% Complete</div>
                 </div>
                 <div className="body">
                     {rows}
@@ -78,24 +83,32 @@ class Table extends React.Component {
         );
 
     }
+
+
+    ComponentDidMount() {
+        fetch('./db/data.json')
+            .then(r => r.json())
+            .then(data => {
+                return (
+                    console.log(data),
+                        this.setState({
+                                id: this.state.id,
+                                firstName: this.state.firstName,
+                                lastName: this.state.lastName,
+                                dateOfBirth: this.state.dateOfBirth,
+                                company: this.state.company,
+                                note: this.state.note
+                            },
+                        )
+
+                )
+            });
+    }
+
 }
 
-/*
- * Render the above component into the div#app
- */
-ReactDOM.render(
-    <Table />,
-    document.getElementById('app'));
 
 
-
-
-
-
-
-
-
-/*
 
 class App extends React.Component {
    constructor(props){
@@ -104,7 +117,7 @@ class App extends React.Component {
    }
    render() {
      return (
-     <Hello />
+     <Table />
      )
    }
  }
@@ -116,5 +129,5 @@ document.addEventListener("DOMContentLoaded", function(){
     document.querySelector('#app')
   )
 
-})
-*/
+});
+
