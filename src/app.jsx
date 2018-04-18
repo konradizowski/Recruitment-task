@@ -113,7 +113,6 @@ class App extends React.Component {
                     <div>
                         <Route exact path="/" component={Page}></Route>
                         <Route path="/:page" component={Page}></Route>
-
                     </div>
                 </HashRouter>
             </div>
