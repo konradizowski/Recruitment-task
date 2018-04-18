@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import data from "./db/data.json";
+import {HashRouter, Router, Route, Link} from 'react-router-dom';
 require('./scss/main.scss');
 
 const Row = ({id, firstName, lastName, dateOfBirth, company, note}) => (
@@ -50,7 +51,15 @@ class Table extends React.Component {
     }
 
     render() {
-        const Rows = this.state.data.map((rowData) => <Row {...rowData} />);
+        console.log(this.props.page);
+        const paged = this.state.data.filter((val, i) => i < this.props.page * 5 && i >= (this.props.page - 1)*5)
+        const Rows = paged.map((rowData) => <Row {...rowData} />);
+
+        let navs = this.state.data.map((e,i) => {
+            if(i%5 == 0) {
+                return <Link to={"/" + (i / 5 + 1)}>{i/5+1}</Link>
+            }
+        });
 
         return (
             <div className="table">
@@ -65,104 +74,58 @@ class Table extends React.Component {
                 <div className="body">
                     {Rows}
                 </div>
+                <nav>
+                    {navs}
+                </nav>
             </div>
         );
 
     }
 
-
-
 }
 
 
+class Page extends React.Component {
+    constructor(props){
+        super(props);
 
-
-class TodoApp extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            todos: ['a','b','c','d','e','f','g','h','i','j','k'],
-            currentPage: 1,
-            todosPerPage: 3
-        };
-        this.handleClick = this.handleClick.bind(this);
     }
-
-    handleClick(event) {
-        this.setState({
-            currentPage: Number(event.target.id)
-        });
-    }
-
     render() {
-        const { todos, currentPage, todosPerPage } = this.state;
-
-        // Logic for displaying current todos
-        const indexOfLastTodo = currentPage * todosPerPage;
-        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-        const currentTodos = todos.slice(indexOfFirstTodo, indexOfLastTodo);
-
-        const renderTodos = currentTodos.map((todo, index) => {
-            return <li key={index}>{todo}</li>;
-        });
-
-        // Logic for displaying page numbers
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(todos.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-
-        const renderPageNumbers = pageNumbers.map(number => {
-            return (
-                <li
-                    key={number}
-                    id={number}
-                    onClick={this.handleClick}
-                >
-                    {number}
-                </li>
-            );
-        });
-
         return (
             <div>
-                <ul>
-                    {renderTodos}
-                </ul>
-                <ul id="page-numbers">
-                    {renderPageNumbers}
-                </ul>
+                <Table page={this.props.match.params.page ? this.props.match.params.page : 1}/>
             </div>
-        );
+        )
     }
 }
-
-
-
 
 
 
 class App extends React.Component {
-   constructor(props){
-     super(props);
+    constructor(props){
+        super(props);
 
-   }
-   render() {
-     return (
-         <div>
-             <Table/>
-             <TodoApp/>
-         </div>
-     )
-   }
- }
+    }
+    render() {
+        return (
+            <div>
+                <HashRouter>
+                    <div>
+                        <Route exact path="/" component={Page}></Route>
+                        <Route path="/:page" component={Page}></Route>
+
+                    </div>
+                </HashRouter>
+            </div>
+        )
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function(){
 
-  ReactDOM.render(
-      <App />,
-    document.querySelector('#app')
-  )
+    ReactDOM.render(
+        <App />,
+        document.querySelector('#app')
+    )
 
 });
-

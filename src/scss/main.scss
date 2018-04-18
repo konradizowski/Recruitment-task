@@ -27,17 +27,18 @@
 }
 
 
-#page-numbers {
+nav {
+  display: flex;
+}
+a {
   list-style: none;
   display: flex;
   margin: 0;
   font-family: 'Roboto', Arial, sans-serif;
   font-size: 1.2em;
-
-  li {
-    margin-right: 0.3em;
-    color: blue;
-    user-select: none;
-    cursor: pointer;
-  }
+  margin-right: 0.3em;
+  color: blue;
+  user-select: none;
+  cursor: pointer;
 }
+
