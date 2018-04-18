@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import data from "./db/data.json"
+import data from "./db/data.json";
 require('./scss/main.scss');
-
-console.log(data)
+import pagination from './pagination';
 
 const Row = ({id, firstName, lastName, dateOfBirth, company, note}) => (
     <div className="row">
@@ -28,13 +27,14 @@ class Table extends React.Component {
             company: undefined,
             note: undefined,
             data: data
+
         };
-
-
 
         this.compareBy.bind(this);
         this.sortBy.bind(this);
     }
+
+
 
     compareBy(key) {
         return function (a, b) {
@@ -59,7 +59,7 @@ class Table extends React.Component {
                     <div onClick={() => this.sortBy('id')}>ID</div>
                     <div onClick={() => this.sortBy('firstName')}>First Name</div>
                     <div onClick={() => this.sortBy('lastName')}>Last Name</div>
-                    <div onClick={() => this.sortBy('date')}>Date of Birth</div>
+                    <div onClick={() => this.sortBy('dateOfBirth')}>Date of Birth</div>
                     <div onClick={() => this.sortBy('company')}>Company</div>
                     <div onClick={() => this.sortBy('note')}>Note</div>
                 </div>
@@ -84,7 +84,9 @@ class App extends React.Component {
    }
    render() {
      return (
-     <Table />
+         <div>
+     <Table/>
+         </div>
      )
    }
  }
